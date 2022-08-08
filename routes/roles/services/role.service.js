@@ -1,4 +1,4 @@
-module.exports = (RoleModel) => {
+module.exports = (RoleModel, PermissionModel, RolePermissionModel) => {
   //create a new role
   const createRole = async (role) => {
     const newRole = new RoleModel(role);
@@ -35,18 +35,44 @@ module.exports = (RoleModel) => {
   };
 
   //Add permission To Role
-  //   const addPermissionToRole = async (roleId, permissionId) => {
-  //     const currentRole = await RoleModel.findById(roleId);
-  //     if (!currentRole) throw new Error();
-  //     currentRole.permissions.push(permissionId);
-  //     await currentRole.save();
-  //     return currentRole;
-  //   };
+  const addPermissionToRole = async (roleId, permissionIds) => {
+    //check the role is exist or not
+    const Role = await RoleModel.findById(roleId);
+    if (!Role) throw new Error();
+
+    //check the permission is exist or not
+    const permissions = await PermissionModel.count({
+      _id: { $in: permissionIds },
+    });
+    if (permissions !== permissionIds) throw new Error();
+
+    //create New Permission Role
+    let newPermissionRole;
+    permissionIds.foreach((permissionId) => {
+      newPermissionRole = newPermissionRole.push({
+        roleId,
+        permissionId,
+      });
+    });
+
+    // const newRolePermissions = permissionIds.map((permission) => {
+    //   return {
+    //     role: roleId,
+    //     permission: permission._id,
+    //   };
+    // });
+    const updatedRolePermissions = await RolePermissionModel.insertMany(
+      newPermissionRole
+    );
+    if (!updatedRolePermissions) throw new Error();
+    return updatedRolePermissions;
+  };
   return {
     createRole,
     getAllRoles,
     getRoleById,
     updateRole,
     deleteRole,
+    addPermissionToRole,
   };
 };
