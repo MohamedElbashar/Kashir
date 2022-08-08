@@ -1,18 +1,16 @@
 const mongoose = require("mongoose");
-const { roles } = require("../utils/constants");
-const { groupSchema } = require("./goups.model");
-
+const Schema = require("mongoose");
 const roleSchema = new mongoose.Schema({
-  roleName: {
+  name: {
     type: String,
     required: true,
-    enum: roles,
   },
-  groupId: {
-    type: Schema.Types.ObjectId,
-    ref: "Group",
-    required: true,
-  },
+  permissionIds: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Permission",
+    },
+  ],
 });
 
 const Role = mongoose.model("Role", roleSchema);
