@@ -12,8 +12,25 @@ const roleValidationSchema = celebrate({
     name: Joi.string().valid("REGULAR", "MANAGER", "GLOBAL_MANAGER").required(),
   }),
 });
-// router.post("/permission/:id", auth, authPermission(["GLOBAL_MANAGER"]), roleValidationSchema, async (req, res) => {
-// const
+
+// @route POST api/roles/permission/:id
+// to add permission to role
+router.post(
+  "/permission/:id",
+  auth,
+  authPermission(["GLOBAL_MANAGER"]),
+  async (req, res) => {
+    const roleId = req.params.id;
+    const permissions = req.body;
+    try {
+      const role = await roleService.addPermissionToRole(roleId, permissions);
+      return returnResponse(res, 200, "Success", role);
+    } catch (err) {
+      return returnResponse(res, 500, "Error", err);
+    }
+  }
+);
+
 router.post(
   "/",
   [roleValidationSchema, auth, authPermission("add_role")],

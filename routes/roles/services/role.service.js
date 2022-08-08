@@ -64,7 +64,6 @@ module.exports = (RoleModel, PermissionModel, RolePermissionModel) => {
     const updatedRolePermissions = await RolePermissionModel.insertMany(
       newPermissionRole
     );
-    if (!updatedRolePermissions) throw new Error();
     return updatedRolePermissions;
   };
   return {

@@ -13,6 +13,29 @@ const permissionValidationSchema = celebrate({
   }),
 });
 
+// @route POST api/permission/role/:id
+// to add role to permission
+
+router.post(
+  "/role/:id",
+  auth,
+  authPermission(["GLOBAL_MANAGER"]),
+  permissionValidationSchema,
+  async (req, res) => {
+    const permissionId = req.params.id;
+    const roles = req.body;
+    try {
+      const permission = await permissionService.addRoleToPermission(
+        permissionId,
+        roles
+      );
+      return returnResponse(res, 200, "Success", permission);
+    } catch (err) {
+      return returnResponse(res, 500, "Error", err);
+    }
+  }
+);
+
 router.post(
   "/",
   [permissionValidationSchema, auth, authPermission("add_permission")],
