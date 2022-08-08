@@ -1,8 +1,13 @@
-module.exports = (UserModel, hashUtil) => {
+module.exports = (UserModel, hashUtil, RoleModel, ROLES) => {
   //create a new user
   const createUser = async (user) => {
     let currentUser = await UserModel.findOne({ email: user.email });
     if (currentUser) throw new Error();
+
+    if (user.groupId) {
+      const role = await RoleModel.findById(user.roleId);
+      if (role !== ROLES.MANAGER) throw new Error();
+    }
 
     currentUser = new UserModel(user);
 
