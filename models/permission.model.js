@@ -5,7 +5,7 @@ const permissionSchema = new schema({
     type: String,
     required: true,
   },
-  url: {
+  description: {
     type: String,
     required: true,
   },

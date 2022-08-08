@@ -1,15 +1,18 @@
 const mongoose = require("mongoose");
 
-const collectionSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const collectionSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    groupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+    },
   },
-  groupId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Group",
-  },
-});
+  { timestamps: true }
+);
 
 const Collection = mongoose.model("Collection", collectionSchema);
 

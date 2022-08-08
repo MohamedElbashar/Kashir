@@ -3,6 +3,7 @@ const router = express.Router();
 const collectionService = require("../service");
 const { celebrate, Segments, Joi } = require("celebrate");
 const auth = require("../../../middleware/auth");
+const returnResponse = require("../../../utils/returnResponse");
 
 const collectionValidationSchema = celebrate({
   [Segments.BODY]: Joi.object({
