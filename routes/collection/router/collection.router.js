@@ -13,48 +13,96 @@ const collectionValidationSchema = celebrate({
 router.get("/", auth, async (req, res) => {
   try {
     const response = await collectionService.getAllCollections();
-    return res.status(200).send(response);
+    return returnResponse(
+      200,
+      "Successfully retrieved collections",
+      response,
+      res
+    );
   } catch (err) {
-    return res.status(400).send(err);
+    return returnResponse(
+      400,
+      "There is an error while retrieving collections",
+      err,
+      res
+    );
   }
 });
 router.get("/:id", auth, async (req, res) => {
   try {
     const response = await collectionService.getCollection(req.params.id);
-    return res.status(200).send(response);
+    return returnResponse(
+      200,
+      "Successfully retrieved collection",
+      response,
+      res
+    );
   } catch (err) {
-    return res.status(400).send(err);
+    return returnResponse(
+      400,
+      "There is an error while retrieving collection",
+      err,
+      res
+    );
   }
 });
 router.post("/", [collectionValidationSchema, auth], async (req, res) => {
   const collection = req.body;
-
   try {
     const response = await collectionService.createCollection(collection);
-    return res.status(200).send(response);
+    return returnResponse(
+      200,
+      "Successfully created collection",
+      response,
+      res
+    );
   } catch (err) {
-    return res.status(400).send(err);
+    return returnResponse(
+      400,
+      "There is an error while creating collection",
+      err,
+      res
+    );
   }
 });
 router.put("/:id", [collectionValidationSchema, auth], async (req, res) => {
   const collection = req.body;
-
   try {
     const response = await collectionService.updateCollection(
       req.params.id,
       collection
     );
-    return res.status(200).send(response);
+    return returnResponse(
+      200,
+      "Successfully updated collection",
+      response,
+      res
+    );
   } catch (err) {
-    return res.status(400).send(err);
+    return returnResponse(
+      400,
+      "There is an error while updating collection",
+      err,
+      res
+    );
   }
 });
 router.delete("/:id", auth, async (req, res) => {
   try {
     const response = await collectionService.deleteCollection(req.params.id);
-    return res.status(200).send(response);
+    return returnResponse(
+      200,
+      "Successfully deleted collection",
+      response,
+      res
+    );
   } catch (err) {
-    return res.status(400).send(err);
+    return returnResponse(
+      400,
+      "There is an error while deleting collection",
+      err,
+      res
+    );
   }
 });
 module.exports = router;
