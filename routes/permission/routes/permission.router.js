@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const permissionService = require("./service");
+const permissionService = require("../service");
 const { celebrate, Segments, Joi } = require("celebrate");
 Joi.objectId = require("joi-objectid")(Joi);
 const auth = require("../../../middleware/auth");

@@ -12,6 +12,8 @@ const roleValidationSchema = celebrate({
     name: Joi.string().valid("REGULAR", "MANAGER", "GLOBAL_MANAGER").required(),
   }),
 });
+// router.post("/permission/:id", auth, authPermission(["GLOBAL_MANAGER"]), roleValidationSchema, async (req, res) => {
+// const
 router.post(
   "/",
   [roleValidationSchema, auth, authPermission("add_role")],

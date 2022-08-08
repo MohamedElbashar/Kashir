@@ -1,6 +1,7 @@
-const Schema = require("mongoose");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const rolePermissionSchema = new Schema({
+const rolePermissionSchema = new mongoose.Schema({
   roleId: {
     type: Schema.Types.ObjectId,
     ref: "Role",
@@ -12,5 +13,5 @@ const rolePermissionSchema = new Schema({
     required: true,
   },
 });
-const RolePermission = Schema.model("RolePermission", rolePermissionSchema);
+const RolePermission = mongoose.model("RolePermission", rolePermissionSchema);
 module.exports = RolePermission;
