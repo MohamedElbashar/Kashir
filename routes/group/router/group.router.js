@@ -7,7 +7,7 @@ const auth = require("../../../middleware/auth");
 
 const groupValidationSchema = celebrate({
   [Segments.BODY]: Joi.object({
-    name: Joi.string().required().lowercase(),
+    name: Joi.string().required(),
     collectionId: Joi.array().items(Joi.objectId()).required(),
   }),
 });

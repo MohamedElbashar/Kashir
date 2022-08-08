@@ -4,6 +4,7 @@ const user = require("./routes/user/router/user.router");
 const auth = require("./routes/auth/router/auth.router");
 const collection = require("./routes/collection/router/collection.router");
 const group = require("./routes/group/router/group.router");
+const item = require("./routes/items/router/item.router");
 const app = express();
 const { errors: celebrateErrors } = require("celebrate");
 const { errorHandler } = require("./middleware/errorHandler");
@@ -23,6 +24,7 @@ app.use("/api/users", user);
 app.use("/api/login", auth);
 app.use("/api/collection", collection);
 app.use("/api/group", group);
+app.use("/api/item", item);
 
 app.use(celebrateErrors());
 app.use(errorHandler);

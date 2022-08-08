@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-const {
-  collectionSchema,
-} = require("../../collection/schema/collection.model");
-
+const Schema = mongoose;
 const itemSchema = new mongoose.Schema({
   name: {
     type: String,
