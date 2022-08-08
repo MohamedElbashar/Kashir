@@ -12,20 +12,24 @@ const roleValidationSchema = celebrate({
     name: Joi.string().valid("REGULAR", "MANAGER", "GLOBAL_MANAGER").required(),
   }),
 });
-router.post("/", [auth, authPermission("add_role")], async (req, res) => {
-  const role = req.body;
-  try {
-    const response = await roleService.createRole(role);
-    return returnResponse(200, "Successfully created role", response, res);
-  } catch (err) {
-    return returnResponse(
-      400,
-      "There Is An Error While Creating Role",
-      err,
-      res
-    );
+router.post(
+  "/",
+  [roleValidationSchema, auth, authPermission("add_role")],
+  async (req, res) => {
+    const role = req.body;
+    try {
+      const response = await roleService.createRole(role);
+      return returnResponse(200, "Successfully created role", response, res);
+    } catch (err) {
+      return returnResponse(
+        400,
+        "There Is An Error While Creating Role",
+        err,
+        res
+      );
+    }
   }
-});
+);
 router.get("/", [auth, authPermission("view_roles")], async (req, res) => {
   try {
     const response = await roleService.getAllRoles();
@@ -52,20 +56,24 @@ router.get("/:id", [auth, authPermission("view_roles")], async (req, res) => {
     );
   }
 });
-router.put("/:id", [auth, authPermission("edit_role")], async (req, res) => {
-  const role = req.body;
-  try {
-    const response = await roleService.updateRole(req.params.id, role);
-    return returnResponse(200, "Successfully updated role", response, res);
-  } catch (err) {
-    return returnResponse(
-      400,
-      "There Is An Error While Updating Role",
-      err,
-      res
-    );
+router.put(
+  "/:id",
+  [roleValidationSchema, auth, authPermission("edit_role")],
+  async (req, res) => {
+    const role = req.body;
+    try {
+      const response = await roleService.updateRole(req.params.id, role);
+      return returnResponse(200, "Successfully updated role", response, res);
+    } catch (err) {
+      return returnResponse(
+        400,
+        "There Is An Error While Updating Role",
+        err,
+        res
+      );
+    }
   }
-});
+);
 router.delete(
   "/:id",
   [auth, authPermission("delete_role")],

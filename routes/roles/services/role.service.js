@@ -1,7 +1,6 @@
 module.exports = (RoleModel) => {
   //create a new role
   const createRole = async (role) => {
-    if (!role.name) throw new Error();
     const newRole = new RoleModel(role);
     await newRole.save();
     return newRole;

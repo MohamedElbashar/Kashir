@@ -6,6 +6,7 @@ const collection = require("./routes/collection/router/collection.router");
 const group = require("./routes/group/router/group.router");
 const item = require("./routes/items/router/item.router");
 const role = require("./routes/roles/router/role.router");
+const permission = require("./routes/permission/routes/permission.router");
 const app = express();
 const { errors: celebrateErrors } = require("celebrate");
 const { errorHandler } = require("./middleware/errorHandler");
@@ -27,6 +28,7 @@ app.use("/api/collection", collection);
 app.use("/api/group", group);
 app.use("/api/item", item);
 app.use("/api/role", role);
+app.use("/api/permission", permission);
 
 app.use(celebrateErrors());
 app.use(errorHandler);
