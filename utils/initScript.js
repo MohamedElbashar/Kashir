@@ -3,7 +3,7 @@ const { Role } = require("../models/roles.model");
 const { Permission } = require("../models/permission.model");
 const { RolePermission } = require("../models/rolePermission.model");
 const rolesObject = require("./rolesObject");
-
+const bcrypt = require("bcrypt");
 module.exports = async () => {
   //check if permission exists or not
   const permissions = await Permission.count({});
@@ -34,10 +34,11 @@ module.exports = async () => {
 
   //check if user exists or not
   const user = await User.findOne({ email: "admin@admin.com" });
+  const password = await bcrypt.hash("admin", 10);
   if (!user) {
     const newUser = new User({
       email: "admin@admin.com",
-      password: "admin",
+      password,
       roleId: currentRole._id,
     });
     await newUser.save();
