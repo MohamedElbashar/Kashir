@@ -8,6 +8,7 @@ const { itemValidationSchema } = require("../validation/itemValidationSchema");
 
 router.use(auth);
 
+// Get all items
 router.get("/", authPermission("get_items"), async (req, res) => {
   try {
     const response = await itemService.getAllItems();
@@ -21,6 +22,8 @@ router.get("/", authPermission("get_items"), async (req, res) => {
     );
   }
 });
+
+// Get item by id
 router.get("/:id", authPermission("get_items"), async (req, res) => {
   try {
     const response = await itemService.getItem(req.params.id);
@@ -34,6 +37,8 @@ router.get("/:id", authPermission("get_items"), async (req, res) => {
     );
   }
 });
+
+// Create item
 router.post(
   "/",
   [itemValidationSchema, authPermission("create_item")],
@@ -52,6 +57,8 @@ router.post(
     }
   }
 );
+
+// Update item
 router.put(
   "/:id",
   [itemValidationSchema, authPermission("edit_item")],
@@ -70,6 +77,8 @@ router.put(
     }
   }
 );
+
+// Delete item
 router.delete("/:id", authPermission("delete_item"), async (req, res) => {
   try {
     const response = await itemService.deleteItem(req.params.id);

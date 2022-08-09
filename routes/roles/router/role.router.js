@@ -26,6 +26,7 @@ router.post(
   }
 );
 
+//create role
 router.post(
   "/",
   [roleValidationSchema, authPermission("add_role")],
@@ -44,6 +45,8 @@ router.post(
     }
   }
 );
+
+// get all roles
 router.get("/", authPermission("get_roles"), async (req, res) => {
   try {
     const response = await roleService.getAllRoles();
@@ -57,6 +60,8 @@ router.get("/", authPermission("get_roles"), async (req, res) => {
     );
   }
 });
+
+// get role by id
 router.get("/:id", authPermission("get_roles"), async (req, res) => {
   try {
     const response = await roleService.getRole(req.params.id);
@@ -70,6 +75,8 @@ router.get("/:id", authPermission("get_roles"), async (req, res) => {
     );
   }
 });
+
+// update role
 router.put(
   "/:id",
   [roleValidationSchema, authPermission("edit_role")],
@@ -88,6 +95,8 @@ router.put(
     }
   }
 );
+
+// delete role
 router.delete("/:id", authPermission("delete_role"), async (req, res) => {
   try {
     const response = await roleService.deleteRole(req.params.id);

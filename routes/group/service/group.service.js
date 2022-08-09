@@ -17,6 +17,7 @@ module.exports = (collectionModel, groupModel) => {
     await newGroup.save();
     return newGroup;
   };
+
   //get all groups
   const getAllGroups = async () => {
     const allGroups = await groupModel
@@ -25,6 +26,7 @@ module.exports = (collectionModel, groupModel) => {
       .sort("name");
     return allGroups;
   };
+
   //get a group
   const getGroup = async (groupId) => {
     const currentGroup = await groupModel
@@ -32,6 +34,7 @@ module.exports = (collectionModel, groupModel) => {
       .populate("collectionId");
     return currentGroup;
   };
+
   //update a group
   const updateGroup = async (groupId, group) => {
     const currentGroup = await groupModel.findByIdAndUpdate(groupId, group, {
@@ -40,6 +43,7 @@ module.exports = (collectionModel, groupModel) => {
     if (!currentGroup) throw new Error();
     return currentGroup;
   };
+
   //delete a group
   const deleteGroup = async (groupId) => {
     const currentGroup = await groupModel.findByIdAndRemove(groupId);

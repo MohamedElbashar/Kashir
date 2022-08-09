@@ -12,7 +12,6 @@ const {
 router.use(auth);
 // @route POST api/permission/role/:id
 // to add role to permission
-
 router.post(
   "/role/:id",
   authPermission("add_role_to_permission"),
@@ -31,6 +30,7 @@ router.post(
   }
 );
 
+// create permission
 router.post(
   "/",
   [permissionValidationSchema, authPermission("add_permission")],
@@ -54,6 +54,8 @@ router.post(
     }
   }
 );
+
+// get all permissions
 router.get("/", authPermission("get_permissions"), async (req, res) => {
   try {
     const response = await permissionService.getAllPermissions();
@@ -72,6 +74,8 @@ router.get("/", authPermission("get_permissions"), async (req, res) => {
     );
   }
 });
+
+// get permission by id
 router.get("/:id", authPermission("get_permissions"), async (req, res) => {
   try {
     const response = await permissionService.getPermission(req.params.id);
@@ -90,6 +94,8 @@ router.get("/:id", authPermission("get_permissions"), async (req, res) => {
     );
   }
 });
+
+// update permission
 router.put(
   "/:id",
   [permissionValidationSchema, authPermission("edit_permission")],
@@ -116,6 +122,8 @@ router.put(
     }
   }
 );
+
+// delete permission
 router.delete("/:id", authPermission("delete_permission"), async (req, res) => {
   try {
     const response = await permissionService.deletePermission(req.params.id);

@@ -9,6 +9,7 @@ const {
 } = require("../validation/collectionValidationSchema");
 
 router.use(auth);
+// Get all collections
 router.get("/", authPermission("get_collections"), async (req, res) => {
   try {
     const response = await collectionService.getAllCollections();
@@ -27,6 +28,7 @@ router.get("/", authPermission("get_collections"), async (req, res) => {
     );
   }
 });
+// Get collection by id
 router.get("/:id", authPermission("get_collections"), async (req, res) => {
   try {
     const response = await collectionService.getCollection(req.params.id);
@@ -45,6 +47,7 @@ router.get("/:id", authPermission("get_collections"), async (req, res) => {
     );
   }
 });
+// Create collection
 router.post(
   "/",
   [authPermission("create_collection"), collectionValidationSchema],
@@ -68,6 +71,7 @@ router.post(
     }
   }
 );
+// Update collection
 router.put(
   "/:id",
   [authPermission("edit_collection"), collectionValidationSchema],
@@ -94,6 +98,7 @@ router.put(
     }
   }
 );
+// Delete collection
 router.delete(
   "/:id",
   authPermission("delete_collection"),

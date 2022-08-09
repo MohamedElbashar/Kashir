@@ -9,6 +9,7 @@ const {
 } = require("../validation/groupValidationSchema");
 
 router.use(auth);
+// Get all groups
 router.get("/", authPermission("get_groups"), async (req, res) => {
   try {
     const response = await groupService.getAllGroups();
@@ -22,7 +23,7 @@ router.get("/", authPermission("get_groups"), async (req, res) => {
     );
   }
 });
-
+// Get group by id
 router.get("/:id", authPermission("get_groups"), async (req, res) => {
   try {
     const response = await groupService.getGroup(req.params.id);
@@ -36,7 +37,7 @@ router.get("/:id", authPermission("get_groups"), async (req, res) => {
     );
   }
 });
-
+// Create group
 router.post(
   "/",
   [authPermission("create_group"), groupValidationSchema],
@@ -56,7 +57,7 @@ router.post(
     }
   }
 );
-
+// Update group
 router.put(
   "/:id",
   [authPermission("edit_group"), groupValidationSchema],
@@ -75,7 +76,7 @@ router.put(
     }
   }
 );
-
+// Delete group
 router.delete(
   "/:id",
   authPermission("delete_permission"),

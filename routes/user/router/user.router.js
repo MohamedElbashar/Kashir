@@ -6,6 +6,7 @@ const router = express.Router();
 const userService = require("../services");
 const { UserValidationSchema } = require("../validation/UserValidationSchema");
 
+//create user
 router.post(
   "/",
   [UserValidationSchema, authPermission("add_user")],
@@ -26,6 +27,7 @@ router.post(
   }
 );
 
+//get current user
 router.get("/me", [auth, authPermission("get_users")], async (req, res) => {
   try {
     const currentUser = await userService.getCurrentUser(req.user._id);
@@ -40,6 +42,7 @@ router.get("/me", [auth, authPermission("get_users")], async (req, res) => {
   }
 });
 
+//get all users
 router.put(
   "/:id",
   [auth, UserValidationSchema, authPermission("edit_user")],
@@ -59,6 +62,7 @@ router.put(
   }
 );
 
+//delete user
 router.delete(
   "/:id",
   [auth, authPermission("delete_user")],
@@ -77,6 +81,7 @@ router.delete(
   }
 );
 
+//get all users
 router.get("/", [authPermission("get_users")], async (req, res) => {
   try {
     const response = await userService.getAllUsers();
