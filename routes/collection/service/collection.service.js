@@ -6,10 +6,8 @@ module.exports = (collectionModel) => {
     });
     if (currentCollection) throw new Error();
 
-    currentCollection = new collectionModel(collection);
-
-    await currentCollection.save();
-    return currentCollection;
+    const result = await collectionModel.create(collection);
+    return result;
   };
   //get all collections
   const getAllCollections = async () => {
