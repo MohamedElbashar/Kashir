@@ -15,7 +15,7 @@ router.use(auth);
 
 router.post(
   "/role/:id",
-  authPermission(["GLOBAL_MANAGER"]),
+  authPermission("add_role_to_permission"),
   async (req, res) => {
     const permissionId = req.params.id;
     const roles = req.body;
@@ -54,7 +54,7 @@ router.post(
     }
   }
 );
-router.get("/", authPermission("view_permissions"), async (req, res) => {
+router.get("/", authPermission("get_permissions"), async (req, res) => {
   try {
     const response = await permissionService.getAllPermissions();
     return returnResponse(
@@ -72,7 +72,7 @@ router.get("/", authPermission("view_permissions"), async (req, res) => {
     );
   }
 });
-router.get("/:id", authPermission("view_permissions"), async (req, res) => {
+router.get("/:id", authPermission("get_permissions"), async (req, res) => {
   try {
     const response = await permissionService.getPermission(req.params.id);
     return returnResponse(

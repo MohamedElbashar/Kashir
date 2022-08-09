@@ -10,6 +10,7 @@ const permission = require("./routes/permission/routes/permission.router");
 const app = express();
 const { errors: celebrateErrors } = require("celebrate");
 const { errorHandler } = require("./middleware/errorHandler");
+const initScript = require("./utils/initScript");
 require("dotenv").config();
 
 mongoose
@@ -21,6 +22,7 @@ mongoose
     console.log("Error connecting to MongoDB....");
   });
 
+initScript();
 app.use(express.json());
 app.use("/api/users", user);
 app.use("/api/login", auth);
