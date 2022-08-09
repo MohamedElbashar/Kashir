@@ -22,14 +22,19 @@ module.exports = async () => {
   //assign role to permissions
   const currentPermissions = await Permission.find({});
   const currentRole = await Role.findOne({ name: "GLOBAL_MANAGER" });
+  const currentRolePermission = await RolePermission.count({});
   let promises = [];
-  for (let i = 0; i < currentPermissions.length; i++) {
-    const rolePermission = new RolePermission({
-      roleId: currentRole._id,
-      permissionId: currentPermissions[i]._id,
+
+  if (currentRolePermission === 0) {
+    currentPermissions.forEach(async (permission) => {
+      const newRolePermission = new RolePermission({
+        roleId: currentRole._id,
+        permissionId: permission._id,
+      });
+      promises.push(newRolePermission.save());
     });
-    promises.push(rolePermission.save());
   }
+
   await Promise.all(promises);
 
   //check if user exists or not
