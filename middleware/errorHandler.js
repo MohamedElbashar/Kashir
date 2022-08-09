@@ -1,5 +1,3 @@
-const { errors: celebrateErrors } = require("celebrate");
-
 function errorHandler(err, req, res, next) {
   const errorResponse = {
     success: false,
