@@ -10,8 +10,8 @@ const collectionValidationSchema = celebrate({
     name: Joi.string().required().lowercase(),
   }),
 });
-
-router.get("/", auth, async (req, res) => {
+router.use(auth);
+router.get("/", async (req, res) => {
   try {
     const response = await collectionService.getAllCollections();
     return returnResponse(
@@ -29,7 +29,7 @@ router.get("/", auth, async (req, res) => {
     );
   }
 });
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const response = await collectionService.getCollection(req.params.id);
     return returnResponse(
@@ -47,7 +47,7 @@ router.get("/:id", auth, async (req, res) => {
     );
   }
 });
-router.post("/", [collectionValidationSchema, auth], async (req, res) => {
+router.post("/", collectionValidationSchema, async (req, res) => {
   const collection = req.body;
   try {
     const response = await collectionService.createCollection(collection);
@@ -66,7 +66,7 @@ router.post("/", [collectionValidationSchema, auth], async (req, res) => {
     );
   }
 });
-router.put("/:id", [collectionValidationSchema, auth], async (req, res) => {
+router.put("/:id", collectionValidationSchema, async (req, res) => {
   const collection = req.body;
   try {
     const response = await collectionService.updateCollection(

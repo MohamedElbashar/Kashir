@@ -37,6 +37,7 @@ module.exports = (PermissionModel) => {
     if (!currentPermission) throw new Error();
     return currentPermission;
   };
+
   // add role to permission
   const addRoleToPermission = async (permissionId, roleIds) => {
     //check the permission is exist or not

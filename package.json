@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles --logHeapUsage --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +21,8 @@
     "mongoose": "^6.5.1",
     "nodemon": "^2.0.19",
     "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "jest": "^28.1.3"
   }
 }

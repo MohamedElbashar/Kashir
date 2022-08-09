@@ -12,8 +12,8 @@ const groupValidationSchema = celebrate({
     collectionId: Joi.array().items(Joi.objectId()).required(),
   }),
 });
-
-router.get("/", auth, async (req, res) => {
+router.use(auth);
+router.get("/", async (req, res) => {
   try {
     const response = await groupService.getAllGroups();
     return returnResponse(200, "Successfully retrieved groups", response, res);
@@ -27,7 +27,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const response = await groupService.getGroup(req.params.id);
     return returnResponse(200, "Successfully retrieved group", response, res);
@@ -41,7 +41,7 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-router.post("/", [groupValidationSchema, auth], async (req, res) => {
+router.post("/", groupValidationSchema, async (req, res) => {
   const group = req.body;
   try {
     const response = await groupService.createGroup(group);
@@ -57,7 +57,7 @@ router.post("/", [groupValidationSchema, auth], async (req, res) => {
   }
 });
 
-router.put("/:id", [groupValidationSchema, auth], async (req, res) => {
+router.put("/:id", groupValidationSchema, async (req, res) => {
   const group = req.body;
   try {
     const response = await groupService.updateGroup(req.params.id, group);

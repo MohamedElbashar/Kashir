@@ -12,15 +12,13 @@ const permissionValidationSchema = celebrate({
     name: Joi.string().required(),
   }),
 });
-
+router.use(auth);
 // @route POST api/permission/role/:id
 // to add role to permission
 
 router.post(
   "/role/:id",
-  auth,
   authPermission(["GLOBAL_MANAGER"]),
-  permissionValidationSchema,
   async (req, res) => {
     const permissionId = req.params.id;
     const roles = req.body;
@@ -38,7 +36,7 @@ router.post(
 
 router.post(
   "/",
-  [permissionValidationSchema, auth, authPermission("add_permission")],
+  [permissionValidationSchema, authPermission("add_permission")],
   async (req, res) => {
     const permission = req.body;
     try {
@@ -59,53 +57,45 @@ router.post(
     }
   }
 );
-router.get(
-  "/",
-  [auth, authPermission("view_permissions")],
-  async (req, res) => {
-    try {
-      const response = await permissionService.getAllPermissions();
-      return returnResponse(
-        200,
-        "Successfully retrieved permissions",
-        response,
-        res
-      );
-    } catch (err) {
-      return returnResponse(
-        400,
-        "There Is An Error While Retrieving Permissions",
-        err,
-        res
-      );
-    }
+router.get("/", authPermission("view_permissions"), async (req, res) => {
+  try {
+    const response = await permissionService.getAllPermissions();
+    return returnResponse(
+      200,
+      "Successfully retrieved permissions",
+      response,
+      res
+    );
+  } catch (err) {
+    return returnResponse(
+      400,
+      "There Is An Error While Retrieving Permissions",
+      err,
+      res
+    );
   }
-);
-router.get(
-  "/:id",
-  [auth, authPermission("view_permissions")],
-  async (req, res) => {
-    try {
-      const response = await permissionService.getPermission(req.params.id);
-      return returnResponse(
-        200,
-        "Successfully retrieved permission",
-        response,
-        res
-      );
-    } catch (err) {
-      return returnResponse(
-        400,
-        "There Is An Error While Retrieving Permission",
-        err,
-        res
-      );
-    }
+});
+router.get("/:id", authPermission("view_permissions"), async (req, res) => {
+  try {
+    const response = await permissionService.getPermission(req.params.id);
+    return returnResponse(
+      200,
+      "Successfully retrieved permission",
+      response,
+      res
+    );
+  } catch (err) {
+    return returnResponse(
+      400,
+      "There Is An Error While Retrieving Permission",
+      err,
+      res
+    );
   }
-);
+});
 router.put(
   "/:id",
-  [permissionValidationSchema, auth, authPermission("edit_permission")],
+  [permissionValidationSchema, authPermission("edit_permission")],
   async (req, res) => {
     const permission = req.body;
     try {
@@ -129,26 +119,22 @@ router.put(
     }
   }
 );
-router.delete(
-  "/:id",
-  [auth, authPermission("delete_permission")],
-  async (req, res) => {
-    try {
-      const response = await permissionService.deletePermission(req.params.id);
-      return returnResponse(
-        200,
-        "Successfully deleted permission",
-        response,
-        res
-      );
-    } catch (err) {
-      return returnResponse(
-        400,
-        "There Is An Error While Deleting Permission",
-        err,
-        res
-      );
-    }
+router.delete("/:id", authPermission("delete_permission"), async (req, res) => {
+  try {
+    const response = await permissionService.deletePermission(req.params.id);
+    return returnResponse(
+      200,
+      "Successfully deleted permission",
+      response,
+      res
+    );
+  } catch (err) {
+    return returnResponse(
+      400,
+      "There Is An Error While Deleting Permission",
+      err,
+      res
+    );
   }
-);
+});
 module.exports = router;

@@ -12,7 +12,9 @@ const itemValidationSchema = celebrate({
     collectionId: Joi.objectId().required(),
   }),
 });
-router.get("/", auth, async (req, res) => {
+router.use(auth);
+
+router.get("/", async (req, res) => {
   try {
     const response = await itemService.getAllItems();
     return returnResponse(200, "Successfully retrieved items", response, res);
@@ -25,7 +27,7 @@ router.get("/", auth, async (req, res) => {
     );
   }
 });
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const response = await itemService.getItem(req.params.id);
     return returnResponse(200, "Successfully retrieved item", response, res);
@@ -38,7 +40,7 @@ router.get("/:id", auth, async (req, res) => {
     );
   }
 });
-router.post("/", [itemValidationSchema, auth], async (req, res) => {
+router.post("/", itemValidationSchema, async (req, res) => {
   const item = req.body;
   try {
     const response = await itemService.createItem(item);
@@ -52,7 +54,7 @@ router.post("/", [itemValidationSchema, auth], async (req, res) => {
     );
   }
 });
-router.put("/:id", [itemValidationSchema, auth], async (req, res) => {
+router.put("/:id", itemValidationSchema, async (req, res) => {
   const item = req.body;
   try {
     const response = await itemService.updateItem(req.params.id, item);
@@ -66,7 +68,7 @@ router.put("/:id", [itemValidationSchema, auth], async (req, res) => {
     );
   }
 });
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const response = await itemService.deleteItem(req.params.id);
     return returnResponse(200, "Successfully deleted item", response, res);

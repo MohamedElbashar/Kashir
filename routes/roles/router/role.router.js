@@ -12,13 +12,13 @@ const roleValidationSchema = celebrate({
     name: Joi.string().valid("REGULAR", "MANAGER", "GLOBAL_MANAGER").required(),
   }),
 });
+router.use(auth);
 
 // @route POST api/roles/permission/:id
 // to add permission to role
 router.post(
   "/permission/:id",
-  auth,
-  authPermission(["GLOBAL_MANAGER"]),
+  authPermission("GLOBAL_MANAGER"),
   async (req, res) => {
     const roleId = req.params.id;
     const permissions = req.body;
@@ -33,7 +33,7 @@ router.post(
 
 router.post(
   "/",
-  [roleValidationSchema, auth, authPermission("add_role")],
+  [roleValidationSchema, authPermission("add_role")],
   async (req, res) => {
     const role = req.body;
     try {
@@ -49,7 +49,7 @@ router.post(
     }
   }
 );
-router.get("/", [auth, authPermission("view_roles")], async (req, res) => {
+router.get("/", authPermission("view_roles"), async (req, res) => {
   try {
     const response = await roleService.getAllRoles();
     return returnResponse(200, "Successfully retrieved roles", response, res);
@@ -62,7 +62,7 @@ router.get("/", [auth, authPermission("view_roles")], async (req, res) => {
     );
   }
 });
-router.get("/:id", [auth, authPermission("view_roles")], async (req, res) => {
+router.get("/:id", authPermission("view_roles"), async (req, res) => {
   try {
     const response = await roleService.getRole(req.params.id);
     return returnResponse(200, "Successfully retrieved role", response, res);
@@ -77,7 +77,7 @@ router.get("/:id", [auth, authPermission("view_roles")], async (req, res) => {
 });
 router.put(
   "/:id",
-  [roleValidationSchema, auth, authPermission("edit_role")],
+  [roleValidationSchema, authPermission("edit_role")],
   async (req, res) => {
     const role = req.body;
     try {
@@ -93,21 +93,17 @@ router.put(
     }
   }
 );
-router.delete(
-  "/:id",
-  [auth, authPermission("delete_role")],
-  async (req, res) => {
-    try {
-      const response = await roleService.deleteRole(req.params.id);
-      return returnResponse(200, "Successfully deleted role", response, res);
-    } catch (err) {
-      return returnResponse(
-        400,
-        "There Is An Error While Deleting Role",
-        err,
-        res
-      );
-    }
+router.delete("/:id", authPermission("delete_role"), async (req, res) => {
+  try {
+    const response = await roleService.deleteRole(req.params.id);
+    return returnResponse(200, "Successfully deleted role", response, res);
+  } catch (err) {
+    return returnResponse(
+      400,
+      "There Is An Error While Deleting Role",
+      err,
+      res
+    );
   }
-);
+});
 module.exports = router;
