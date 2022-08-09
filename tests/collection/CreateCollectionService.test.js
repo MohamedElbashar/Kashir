@@ -4,16 +4,17 @@ const CollectionMoc = {
 };
 const resetAllMocks = () => {
   CollectionMoc.findOne.mockReset();
+  CollectionMoc.create.mockReset();
 };
 
-jest.doMock("../models/collection.model", () => {
+jest.doMock("../../models/collection.model", () => {
   return {
     Collection: CollectionMoc,
   };
 });
-const collectionService = require("../routes/collection/service");
+const collectionService = require("../../routes/collection/service");
 
-describe("Collection service", () => {
+describe("Create Collection service", () => {
   beforeEach(() => {
     resetAllMocks();
   });
