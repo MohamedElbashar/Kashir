@@ -1,4 +1,4 @@
-const { Collection } = require("../schema/collection.model");
+const { Collection } = require("../../../models/collection.model");
 
 const makeCollectionService = require("./collection.service");
 

@@ -1,4 +1,4 @@
-const { User } = require("../schema/users.model");
+const { User } = require("../../../models/users.model");
 const { Role } = require("../../../models/roles.model");
 const bcrypt = require("bcrypt");
 const ROLES = require("../../../utils/constants");

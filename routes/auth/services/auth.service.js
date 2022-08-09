@@ -1,4 +1,4 @@
-const { User } = require("../../user/schema/users.model");
+const { User } = require("../../../models/users.model");
 const bcrypt = require("bcrypt");
 
 const authUser = async (user) => {
