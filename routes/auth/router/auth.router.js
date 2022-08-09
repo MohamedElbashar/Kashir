@@ -1,13 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { authUser } = require("../services/auth.service");
-const { celebrate, Segments, Joi } = require("celebrate");
-const UserValidationSchema = celebrate({
-  [Segments.BODY]: Joi.object({
-    email: Joi.string().required().email().lowercase(),
-    password: Joi.string().required(),
-  }),
-});
+const { UserValidationSchema } = require("../validation/UserValidationSchema");
 
 router.post("/", UserValidationSchema, async (req, res) => {
   const user = req.body;

@@ -1,17 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const itemService = require("../service");
-const { celebrate, Segments, Joi } = require("celebrate");
-Joi.objectId = require("joi-objectid")(Joi);
+
 const auth = require("../../../middleware/auth");
 const returnResponse = require("../../../utils/returnResponse");
+const { itemValidationSchema } = require("../validation/itemValidationSchema");
 
-const itemValidationSchema = celebrate({
-  [Segments.BODY]: Joi.object({
-    name: Joi.string().required(),
-    collectionId: Joi.objectId().required(),
-  }),
-});
 router.use(auth);
 
 router.get("/", async (req, res) => {

@@ -1,17 +1,12 @@
 const express = require("express");
 const roleService = require("../services");
 const router = express.Router();
-const { celebrate, Segments, Joi } = require("celebrate");
-Joi.objectId = require("joi-objectid")(Joi);
+
 const auth = require("../../../middleware/auth");
 const authPermission = require("../../../middleware/authPermission");
 const returnResponse = require("../../../utils/returnResponse");
+const { roleValidationSchema } = require("../validation/roleValidationSchema");
 
-const roleValidationSchema = celebrate({
-  [Segments.BODY]: Joi.object({
-    name: Joi.string().valid("REGULAR", "MANAGER", "GLOBAL_MANAGER").required(),
-  }),
-});
 router.use(auth);
 
 // @route POST api/roles/permission/:id

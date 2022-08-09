@@ -1,16 +1,9 @@
-const { celebrate, Segments, Joi } = require("celebrate");
 const express = require("express");
 const auth = require("../../../middleware/auth");
 const returnResponse = require("../../../utils/returnResponse");
 const router = express.Router();
 const userService = require("../services");
-
-const UserValidationSchema = celebrate({
-  [Segments.BODY]: Joi.object({
-    email: Joi.string().required().email().lowercase(),
-    password: Joi.string().required(),
-  }),
-});
+const { UserValidationSchema } = require("../validation/UserValidationSchema");
 
 router.post("/", UserValidationSchema, async (req, res) => {
   const user = req.body;

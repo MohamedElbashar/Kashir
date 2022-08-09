@@ -1,15 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const collectionService = require("../service");
-const { celebrate, Segments, Joi } = require("celebrate");
 const auth = require("../../../middleware/auth");
 const returnResponse = require("../../../utils/returnResponse");
+const {
+  collectionValidationSchema,
+} = require("../validation/collectionValidationSchema");
 
-const collectionValidationSchema = celebrate({
-  [Segments.BODY]: Joi.object({
-    name: Joi.string().required().lowercase(),
-  }),
-});
 router.use(auth);
 router.get("/", async (req, res) => {
   try {
