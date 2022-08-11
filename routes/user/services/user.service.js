@@ -32,7 +32,7 @@ module.exports = (UserModel, hashUtil, RoleModel, ROLES) => {
     return currentUser;
   };
   //update the current user
-  const updateUser = async (userId) => {
+  const updateUser = async (userId, user) => {
     const currentUser = await UserModel.findByIdAndUpdate(userId, user, {
       new: true,
     });
