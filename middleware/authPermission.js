@@ -20,5 +20,5 @@ module.exports = (permission) => async (req, res, next) => {
       return;
     }
   }
-  return res.status(403).send(" ");
+  return res.status(403).send("Forbidden");
 };
