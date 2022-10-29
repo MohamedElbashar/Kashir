@@ -1,0 +1,132 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+[ -n "$CI" ] && exit 0
+
+if tput cols >/dev/null 2>&1
+then
+    COLUMNS=$( tput cols )
+else
+    COLUMNS=80
+fi
+
+# exit when any command fails
+set -e
+# use consistent localization settings
+LC_ALL=C
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=$(git hash-object -t tree /dev/null)
+fi
+
+# Cross platform projects tend to avoid non-ASCII filenames; prevent
+# them from being added to the repository. We exploit the fact that the
+# printable range starts at the space character and ends with tilde.
+# Note that the use of brackets around a tr range is ok here, (it's
+# even required, for portability to Solaris 10's /usr/bin/tr), since
+# the square bracket bytes happen to fall in the designated range.
+if test $(git diff --cached --name-only --diff-filter=A -z $against |
+	  LC_ALL=C tr -d '[ -~]\0' | wc -c) != 0
+then
+	message=$(cat <<'EOF'
+Error: Attempt to add a non-ASCII file name.
+
+This can cause problems working with people on other platforms.
+
+Aborting, so you can go rename the file.
+EOF
+)
+    echo "$message" | fold -sw $COLUMNS 1>&2
+	exit 1
+fi
+
+# If there are whitespace errors, print the offending file names and fail.
+if ! git diff-index --check --cached $against -- 1>&2
+then
+	message=$(cat <<'EOF'
+Error: Files have conflict markers, trailing whitespace, or other whitespace errors. This isn't as comprehensive a check as Prettier, but Prettier can clean it up.
+
+If there is a merge conflict, fix the conflict.
+
+If it is a whitespace issue, you can start with a command like this:
+
+    npx prettier -w .
+
+If the file is exluded by prettier you'll need to fix it manually. For example, look for blank lines with extra spaces in them, or spaces at the end of lines.
+
+You then need to stage the changes before attempting to commit again.
+
+Aborting, so you can go fix the file(s).
+EOF
+)
+    echo "$message" | fold -sw $COLUMNS 1>&2
+	exit 1
+fi
+
+export valid_email_regex="^[a-z0-9.]+@kashier\.com$"
+export valid_name_regex="^[a-z]*[A-Z][A-Za-z'-]+( [a-z]*[A-Z][A-Za-z'-]+)+$"
+
+# check for valid email: "@kashier.com"
+if (echo "$GIT_AUTHOR_EMAIL" | grep -Eqv "$valid_email_regex" >/dev/null 2>&1) \
+   || (echo "$GIT_AUTHOR_NAME" | grep -Eqv "$valid_name_regex" >/dev/null 2>&1)
+then
+    message=$(envsubst <<'EOF'
+Hey there! To keep things tidy, this repo asks you to submit your Git commits using a name and e-mail like this pattern:
+
+    ${valid_name_regex} <${valid_email_regex}>
+
+    - ASCII name with at least two words and both upper case and lower case
+    - Valid email ending with "@kashier.com"
+
+...but yours is configured like this:
+
+    ${GIT_AUTHOR_NAME} <${GIT_AUTHOR_EMAIL}>
+
+To fix it, you can use commands like this:
+
+    git config --local user.name "Fulan Smith"
+    git config --local user.email "fulan.smith@kashier.com"
+
+Aborting, so you can go fix your settings.
+EOF
+)
+    echo "$message" | fold -sw $COLUMNS 1>&2
+    exit 1
+fi
+
+# check for full name, with capitalization
+
+# check branch name
+
+export local_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+export valid_branch_regex="^(PAY-[a-z0-9._-]+|.*|master|HEAD)$"
+if echo "$local_branch" | grep -Eqv $valid_branch_regex
+then
+    message=$(envsubst <<'EOF'
+Hey there! To keep things tidy, this repo asks you to submit your Git commits on a branch with this pattern:
+
+    ${valid_branch_regex}
+
+    - on a branch starting with `PAY/`
+    - only lowercase ASCII letters, numbers, period, underscore, and dash
+    - on the trunk branch of `master`
+
+...but yours is configured like this:
+
+    ${local_branch}
+
+To fix it, you can use a command like this:
+
+    git branch -m PAY-new_name
+
+Aborting, so you can go rename your branch.
+EOF
+)
+    echo "$message" | fold -sw $COLUMNS 1>&2
+    exit 1
+fi
